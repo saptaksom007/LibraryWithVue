@@ -2,17 +2,62 @@
   <div class="register-container">
     <div class="card">
       <h1 class="register-title">Register</h1>
-      <form class="register-form">
-        <input type="text" placeholder="Username" class="register-input" />
-        <input type="email" placeholder="Email" class="register-input" />
-        <input type="password" placeholder="Password" class="register-input" />
+      <form class="register-form" @submit.prevent="registerHandler">
+        <input
+          v-model="name"
+          type="text"
+          placeholder="Username"
+          class="register-input"
+        />
+        <input
+          v-model="email"
+          type="email"
+          placeholder="Email"
+          class="register-input"
+        />
+        <input
+          v-model="password"
+          type="password"
+          placeholder="Password"
+          class="register-input"
+        />
         <button type="submit" class="register-button">Register</button>
       </form>
     </div>
   </div>
 </template>
-  
-  <style>
+<script>
+import useUserStore from '@/store/user'
+import { mapActions } from 'pinia'
+export default {
+  name: 'RegisterComponent',
+  data() {
+    return {
+      name: '',
+      email: '',
+      password: '',
+    }
+  },
+  methods: {
+    async registerHandler() {
+      if (!this.name || !this.email || !this.password) return
+      try {
+        await this.register({
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          userType: 'student',
+        })
+      } catch (error) {
+        console.log(error.message)
+      }
+    },
+
+    ...mapActions(useUserStore, ['register']),
+  },
+}
+</script>
+<style>
 .register-container {
   display: flex;
   flex-direction: column;
