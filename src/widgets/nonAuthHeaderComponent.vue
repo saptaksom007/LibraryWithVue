@@ -22,7 +22,7 @@ export default {
   methods: {
     toggleValue(val) {
       if (val === 1) 
-        this.$router.replace({ name: "collection" });
+        this.$router.push({ name: "collection" });
 
       this.$emit("toggleValue", val);
     },

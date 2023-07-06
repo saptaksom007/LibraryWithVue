@@ -1,10 +1,16 @@
 <template>
   <div>
     <h1>Collection Page</h1>
-    <div v-for="book in selectedBooks" :key="book.id">
-      <h3>{{ book.title }}</h3>
-      <p>{{ book.author }}</p>
-      <!-- Display other book details -->
+    <div class="book-list">
+      <transition-group name="fade">
+        <div v-for="book in selectedBooks" :key="book.id" class="book-item">
+          <img :src="book.image" alt="Book Cover" class="book-image" />
+          <h3 class="book-title">{{ book.title }}</h3>
+          <p class="book-author">{{ book.author }}</p>
+          <p class="book-category">{{ book.category }}</p>
+          <p class="book-course">{{ book.course }}</p>
+        </div>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -17,8 +23,8 @@ export default {
     };
   },
   created() {
-    this.selectedBooks = this.$route.params.selectedBooks;
-    console.log('data',this.selectedBooks);
+    this.selectedBooks = JSON.parse(this.$route.query.selectedBooks);
+    console.log("data", this.selectedBooks);
   },
 };
 </script>

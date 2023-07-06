@@ -197,8 +197,8 @@ export default defineComponent({
       console.log("here", JSON.stringify(this.selectedBooks));
       this.$router.push({
         name: "collection",
-        params: {
-          selectedBooks: this.selectedBooks,
+        query: {
+          selectedBooks: JSON.stringify(this.selectedBooks),
         },
       });
     },
