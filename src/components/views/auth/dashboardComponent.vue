@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import headerComponent from "@/widgets/headerComponent.vue";
+import headerComponent from "@/widgets/authHeaderComponent.vue";
 import LoginComponent from "@/widgets/loginComponent.vue";
 import RegisterComponent from "@/widgets/registerComponent.vue";
 import BooksComponent from "@/widgets/booksComponent.vue";

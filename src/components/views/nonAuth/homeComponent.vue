@@ -1,7 +1,7 @@
 <template>
-  <div class="book-homepage">
-    <headerComponent />
+  <headerComponent />
 
+  <div class="book-homepage">
     <div class="filter-container">
       <input
         type="text"
@@ -33,7 +33,13 @@
     </div>
     <div class="book-list">
       <transition-group name="fade">
-        <div v-for="book in filteredBooks" :key="book.id" class="book-item">
+        <div
+          v-for="book in filteredBooks"
+          :key="book.id"
+          class="book-item"
+          :class="{ selected: selectedBooks.includes(book) }"
+          @click="selectBook(book)"
+        >
           <img :src="book.image" alt="Book Cover" class="book-image" />
           <h3 class="book-title">{{ book.title }}</h3>
           <p class="book-author">{{ book.author }}</p>
@@ -42,12 +48,20 @@
         </div>
       </transition-group>
     </div>
+
+    <button
+      v-show="selectedBooks.length > 0"
+      class="checkout-button"
+      @click="goToNextPage()"
+    >
+      Checkout
+    </button>
   </div>
 </template>
 
 <script>
 import { defineComponent } from "vue";
-import headerComponent from "@/widgets/headerComponent.vue";
+import headerComponent from "@/widgets/nonAuthHeaderComponent.vue";
 export default defineComponent({
   data() {
     return {
@@ -136,12 +150,13 @@ export default defineComponent({
           image: "book10.jpg",
         },
       ],
+      selectedBooks: [],
       categories: ["Fiction", "Non-Fiction", "Mystery"],
       courses: ["Computer Science", "History", "Mathematics", "Biology"],
     };
   },
   components: {
-    Headers,
+    headerComponent,
   },
   computed: {
     filteredBooks() {
@@ -163,6 +178,29 @@ export default defineComponent({
 
         return filtered;
       }, []);
+    },
+  },
+  methods: {
+    selectBook(book) {
+      if (this.selectedBooks.includes(book)) {
+        this.selectedBooks = this.selectedBooks.filter(
+          (selectedBook) => selectedBook !== book
+        );
+      } else {
+        this.selectedBooks.push(book);
+      }
+    },
+    checkout(book) {
+      this.selectedBooks.includes(book);
+    },
+    goToNextPage() {
+      console.log("here", JSON.stringify(this.selectedBooks));
+      this.$router.push({
+        name: "collection",
+        params: {
+          selectedBooks: this.selectedBooks,
+        },
+      });
     },
   },
 });
@@ -245,5 +283,17 @@ export default defineComponent({
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+.book-item.selected {
+  border: 2px solid rgb(19, 23, 255); /* Apply a red border to selected books */
+}
+.checkout-button {
+  padding: 10px;
+  background-color: rgb(19, 23, 255);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 10px;
 }
 </style>

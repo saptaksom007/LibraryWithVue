@@ -5,12 +5,12 @@ import 'firebase/storage'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: 'AIzaSyB_AnoiLV7Ww7qys4gJNSHp5SUwe4uDJrY',
-  authDomain: 'library-management-4841b.firebaseapp.com',
-  projectId: 'library-management-4841b',
-  storageBucket: 'library-management-4841b.appspot.com',
-  messagingSenderId: '118592485301',
-  appId: '1:118592485301:web:fb32b80476f501caeccbfc',
+  apiKey: "AIzaSyABHD8e6d6O2_uXZqZF78GxYAMIywn4UAQ",
+  authDomain: "saptaklib.firebaseapp.com",
+  projectId: "saptaklib",
+  storageBucket: "saptaklib.appspot.com",
+  messagingSenderId: "76964269569",
+  appId: "1:76964269569:web:cd63bd1531698ae82ffa00"
 }
 
 firebase.initializeApp(firebaseConfig)
