@@ -1,5 +1,7 @@
 <template>
   <div class="book-homepage">
+    <headerComponent />
+
     <div class="filter-container">
       <input
         type="text"
@@ -29,7 +31,6 @@
         </select>
       </div>
     </div>
-
     <div class="book-list">
       <transition-group name="fade">
         <div v-for="book in filteredBooks" :key="book.id" class="book-item">
@@ -45,8 +46,8 @@
 </template>
 
 <script>
-import { defineComponent, ref, computed } from "vue";
-
+import { defineComponent } from "vue";
+import headerComponent from "@/widgets/headerComponent.vue";
 export default defineComponent({
   data() {
     return {
@@ -139,13 +140,16 @@ export default defineComponent({
       courses: ["Computer Science", "History", "Mathematics", "Biology"],
     };
   },
+  components: {
+    Headers,
+  },
   computed: {
     filteredBooks() {
       const query = this.searchQuery.toLowerCase();
       const category = this.selectedCategory.toLowerCase();
       const course = this.selectedCourse.toLowerCase();
 
-      return this.books.filter((book) => {
+      return this.books.reduce((filtered, book) => {
         const titleMatch = book.title.toLowerCase().includes(query);
         const authorMatch = book.author.toLowerCase().includes(query);
         const categoryMatch =
@@ -153,8 +157,12 @@ export default defineComponent({
         const courseMatch =
           course === "" || book.course.toLowerCase() === course;
 
-        return titleMatch || authorMatch || categoryMatch || courseMatch;
-      });
+        if ((titleMatch || authorMatch) && categoryMatch && courseMatch) {
+          filtered.push(book);
+        }
+
+        return filtered;
+      }, []);
     },
   },
 });

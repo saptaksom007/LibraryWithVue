@@ -12,18 +12,13 @@
 </template>
 
 <script>
-// import { mapState } from "pinia";
-// import { useAppStateStore } from "@/store/store";
-
 export default {
   data() {
     return {
       storeVal: "",
     };
   },
-  // computed: {
-  //   storeVal: authStore.userId,
-  // },
+
   methods: {
     toggleValue(val) {
       this.$emit("toggleValue", val);
