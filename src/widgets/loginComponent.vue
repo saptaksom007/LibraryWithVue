@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <form @submit.prevent="login" class="login-form">
+    <form class="login-form">
       <h1 class="login-title">Login</h1>
 
       <div class="form-group">
@@ -26,15 +26,29 @@
         <div v-if="showError && !password" class="invalid-feedback">
           Password is required
         </div>
+        <br />
+        <div class="checkbox-wrapper">
+          <input
+            type="checkbox"
+            id="isAdmin"
+            v-model="this.isAdmin"
+            class="custom-checkbox"
+          />
+          <label for="isAdmin" class="checkbox-label">Is the user admin?</label>
+        </div>
+        <br />
       </div>
-      <button type="submit" class="login-button">Login</button>
+      <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
+      <button type="submit" @click.prevent="loginHandler" class="login-button">
+        Login
+      </button>
     </form>
   </div>
 </template>
 
 <script>
 import useUserStore from "@/store/user";
-import { mapWritableState } from "pinia";
+import { mapWritableState, mapActions } from "pinia";
 
 export default {
   name: "Login",
@@ -44,30 +58,40 @@ export default {
       password: "",
       showError: false,
       toggleValue: "",
+      isAdmin: false,
+      loginFailed: "",
     };
   },
   computed: {
     ...mapWritableState(useUserStore, ["isLoggedIn"]),
   },
   methods: {
-    login() {
-      if (!this.email || !this.password) {
-        this.showError = true;
-        return;
+    ...mapActions(useUserStore, ["isLoggedIn", "login"]),
+    async loginHandler() {
+      if (!this.email || !this.password) return;
+      try {
+        await this.login({
+          email: this.email,
+          password: this.password,
+        });
+        if (this.isLoggedIn && this.isAdmin) {
+          console.log("the val", this.isAdmin);
+          this.$router.replace({
+            name: "adminHome",
+            query: {
+              isAdmin: "Admin",
+            },
+          });
+        } else
+          this.$router.replace({
+            name: "home",
+            query: {
+              isAdmin: "Student",
+            },
+          });
+      } catch (error) {
+        this.loginFailed = error.message;
       }
-
-      // Perform login logic here
-
-      this.toggleValue = "Student";
-      // const authStore = useAppStateStore();
-      // authStore.setValue("Student");
-      this.isLoggedIn = true;
-      console.log("Login successful");
-      this.$router.replace({ name: "home" });
-      // Reset form
-      this.email = "";
-      this.password = "";
-      this.showError = false;
     },
   },
 };
@@ -153,5 +177,44 @@ input {
   .login-form {
     padding: 10px;
   }
+}
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.custom-checkbox {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  margin-right: 10px;
+  cursor: pointer;
+  position: relative;
+}
+.custom-checkbox:checked {
+  background-color: #3d90e4;
+  border-color: #3d90e4;
+}
+
+.custom-checkbox:checked::after {
+  content: "\2714";
+  font-size: 12px;
+  color: #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.checkbox-label {
+  font-size: 14px;
+  color: #555;
+}
+.error-message {
+  color: red;
 }
 </style>

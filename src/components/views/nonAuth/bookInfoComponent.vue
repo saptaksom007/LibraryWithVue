@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h1>Collection Page</h1>
+    <headerComponent />
+    <h1>You have successfully borrow these books :-</h1>
     <div class="book-list">
       <transition-group name="fade">
         <div v-for="book in selectedBooks" :key="book.id" class="book-item">
@@ -16,6 +17,8 @@
 </template>
   
   <script>
+import headerComponent from "@/widgets/nonAuthHeaderComponent.vue";
+
 export default {
   data() {
     return {
@@ -25,6 +28,9 @@ export default {
   created() {
     this.selectedBooks = JSON.parse(this.$route.query.selectedBooks);
     console.log("data", this.selectedBooks);
+  },
+  components: {
+    headerComponent,
   },
 };
 </script>
@@ -45,6 +51,7 @@ export default {
   border-radius: 5px;
   background-color: #f8f8f8;
   transition: all 0.3s ease;
+  flex-wrap: wrap;
 }
 
 .book-item:hover {

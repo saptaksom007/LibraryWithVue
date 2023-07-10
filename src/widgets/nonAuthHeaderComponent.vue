@@ -2,9 +2,8 @@
   <header>
     <nav>
       <ul>
-        <li>Student/Admin</li>
+        <li v-if="isAdmin">Welcome,{{ isAdmin }}</li>
         <li @click.prevent="toggleValue(0)">Home</li>
-        <li @click.prevent="toggleValue(1)">My Collection</li>
         <li @click.prevent="toggleValue(2)">Logout</li>
       </ul>
     </nav>
@@ -12,18 +11,30 @@
 </template>
   
   <script>
+import { mapActions } from "pinia";
+import useUserStore from "@/store/user";
+
 export default {
   data() {
     return {
       storeVal: "",
     };
   },
+  props: {
+    isAdmin: {
+      type: String,
+      required: true,
+    },
+  },
 
   methods: {
-    toggleValue(val) {
-      if (val === 1) 
-        this.$router.push({ name: "collection" });
+    ...mapActions(useUserStore, ["logout"]),
 
+    toggleValue(val) {
+      if (val === 2) {
+        this.logout();
+        this.$router.push({ name: "dashboard" });
+      }
       this.$emit("toggleValue", val);
     },
   },

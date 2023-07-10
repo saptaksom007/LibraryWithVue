@@ -1,5 +1,5 @@
 <template>
-  <headerComponent />
+  <headerComponent :isAdmin="this.isAdmin" />
 
   <div class="book-homepage">
     <div class="filter-container">
@@ -62,98 +62,22 @@
 <script>
 import { defineComponent } from "vue";
 import headerComponent from "@/widgets/nonAuthHeaderComponent.vue";
+import books from "@/includes/bookObj";
 export default defineComponent({
   data() {
     return {
       searchQuery: "",
       selectedCategory: "",
       selectedCourse: "",
-      books: [
-        {
-          id: 1,
-          title: "Book 1",
-          author: "Author 1",
-          category: "Fiction",
-          course: "Computer Science",
-          image: "book1.jpg",
-        },
-        {
-          id: 2,
-          title: "Book 2",
-          author: "Author 2",
-          category: "Non-Fiction",
-          course: "History",
-          image: "book2.jpg",
-        },
-        {
-          id: 3,
-          title: "Book 3",
-          author: "Author 3",
-          category: "Mystery",
-          course: "Mathematics",
-          image: "book3.jpg",
-        },
-        {
-          id: 4,
-          title: "Book 4",
-          author: "Author 4",
-          category: "Fiction",
-          course: "Biology",
-          image: "book4.jpg",
-        },
-        {
-          id: 5,
-          title: "Book 5",
-          author: "Author 5",
-          category: "Non-Fiction",
-          course: "Computer Science",
-          image: "book5.jpg",
-        },
-        {
-          id: 6,
-          title: "Book 6",
-          author: "Author 6",
-          category: "Mystery",
-          course: "History",
-          image: "book6.jpg",
-        },
-        {
-          id: 7,
-          title: "Book 7",
-          author: "Author 7",
-          category: "Fiction",
-          course: "Mathematics",
-          image: "book7.jpg",
-        },
-        {
-          id: 8,
-          title: "Book 8",
-          author: "Author 8",
-          category: "Non-Fiction",
-          course: "Biology",
-          image: "book8.jpg",
-        },
-        {
-          id: 9,
-          title: "Book 9",
-          author: "Author 9",
-          category: "Mystery",
-          course: "Computer Science",
-          image: "book9.jpg",
-        },
-        {
-          id: 10,
-          title: "Book 10",
-          author: "Author 10",
-          category: "Fiction",
-          course: "History",
-          image: "book10.jpg",
-        },
-      ],
+      books: books,
       selectedBooks: [],
       categories: ["Fiction", "Non-Fiction", "Mystery"],
       courses: ["Computer Science", "History", "Mathematics", "Biology"],
     };
+  },
+  created() {
+    this.isAdmin = this.$route.query.isAdmin;
+    console.log("isAdmin", this.isAdmin);
   },
   components: {
     headerComponent,
@@ -225,12 +149,14 @@ export default defineComponent({
 }
 
 .book-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 20px;
 }
 
 .book-item {
+  flex: 0 0 250px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -288,12 +214,14 @@ export default defineComponent({
   border: 2px solid rgb(19, 23, 255); /* Apply a red border to selected books */
 }
 .checkout-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
   padding: 10px;
   background-color: rgb(19, 23, 255);
   color: #fff;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  margin-top: 10px;
 }
 </style>
